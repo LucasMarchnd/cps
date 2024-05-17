@@ -84,6 +84,7 @@ int main()
         // envoyer le bit de parité au serveur
         send(sock_serveur, &parity, 1, 0);
         
+        
         // recevoir la réponse du serveur
         recv(sock_serveur, buffer, BUFFER_SIZE, 0);
 
