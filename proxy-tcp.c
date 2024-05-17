@@ -63,6 +63,8 @@ int main()
     }
     printf("Connected to server\n");
 
+    srand(time(NULL));
+
     char buffer[BUFFER_SIZE];
     while (1) {
         recv(sock_client, buffer, BUFFER_SIZE, 0);
@@ -74,7 +76,7 @@ int main()
 
         // je veux avec une chance sur 2 brouiller un bit dans l'octet reçu
         if (rand() % 2 == 0) {
-            // brouiller un bit dans l'octet reçu avec un random
+            // brouiller un bit dans l'octet reçu par son opposé
             buffer[0] ^= 1 << (rand() % 8);
         }
         // envoyer l'octet brouillé au serveur
@@ -85,8 +87,6 @@ int main()
         // recevoir la réponse du serveur
         recv(sock_serveur, buffer, BUFFER_SIZE, 0);
 
-        // on envoie 1 au buffer pour dire que le serveur a bien reçu
-        //buffer[0] = '1';
         send(sock_client, buffer, BUFFER_SIZE, 0);
     }
     
