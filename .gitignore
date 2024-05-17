@@ -1,2 +1,5 @@
 *.o
 .vscode
+proxy
+serveur
+client
