@@ -13,6 +13,7 @@ int calculate_parity(unsigned char octet) {
             p = !p;
         }
     }
+    
 
     return p;
 }
