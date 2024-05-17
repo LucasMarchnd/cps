@@ -43,6 +43,7 @@ int main() {
         recv(sock_proxy, buffer, BUFFER_SIZE, 0);
         //printf("Received: %s\n", buffer);
 
+        // recupérer le bit de parité du proxy
         int parity = 0;
         recv(sock_proxy, &parity, 1, 0);
         // printf("Received parity: %d\n", parity);
