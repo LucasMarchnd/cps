@@ -38,28 +38,25 @@ int main() {
     sock_proxy = accept(sock_serveur, (struct sockaddr *)&proxy_addr, &proxy_len);
     printf("Proxy connected\n");
 
-    char buffer[BUFFER_SIZE];
+    char buffer[2*BUFFER_SIZE];
     while (1) {
-        recv(sock_proxy, buffer, BUFFER_SIZE, 0);
-        //printf("Received: %s\n", buffer);
+        recv(sock_proxy, buffer, 2*BUFFER_SIZE, 0);
 
-        // recupérer le bit de parité du proxy
-        int parity = 0;
-        recv(sock_proxy, &parity, 1, 0);
-        // printf("Received parity: %d\n", parity);
+        uint8_t calculated_crc = crc8(buffer[0]);
         
-        int np = calculate_parity(buffer[0]);
-        // printf("Calculated parity: %d\n", np);
-        
-        if (parity == np) {
-            //printf("Parity is correct\n");
-            printf("%c", buffer[0]);
-            send(sock_proxy, "A", 1, 0);
+        print_bits8(buffer[0]);
+        printf("Received CRC: ");
+        print_bits8(buffer[1]);
+        printf("CRC: ");
+        print_bits8(calculated_crc);
+
+        if (calculated_crc == buffer[1]) {
+            printf("Parity is correct\n");
         } else {
-            //printf("Parity is incorrect\n");
-            send(sock_proxy, "N", 1, 0);
+            printf("Parity is incorrect\n");
         }
-
+        printf("--------------------\n");
+        send(sock_proxy, "A", 1, 0);
         
     }
 

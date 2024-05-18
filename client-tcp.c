@@ -41,11 +41,12 @@ int main(int argc, char const *argv[])
         printf("Entrez un mot :");
         fflush(stdout);
         
-        ssize_t bytes_read = read(STDIN_FILENO, buffer, BUFFER_SIZE);
+        ssize_t bytes_read = read(STDIN_FILENO, buffer, BUFFER_SIZE - 1);
         if (bytes_read < 0) {
             perror("read");
             break;
         }
+        buffer[bytes_read] = '\0';
         for (int i = 0; i < bytes_read; i++)
         {
             send(sock_proxy, &buffer[i], 1, 0);
@@ -53,7 +54,7 @@ int main(int argc, char const *argv[])
             // j'attends la réponse du proxy
             char response;
             recv(sock_proxy, &response, 1, 0);
-            if (response != 'A')
+            if (response == 'A')
             {
                 printf("Parity is correct\n");
             }
