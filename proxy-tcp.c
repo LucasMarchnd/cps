@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "fonction.h"
 
@@ -63,31 +64,36 @@ int main()
     }
     printf("Connected to server\n");
 
-    srand(time(NULL));
+    //srand(time(NULL));
 
     char buffer[BUFFER_SIZE];
+    char envoyer[BUFFER_SIZE*2]; // buffer pour envoyer l'octet brouillé et l'octet pour le crc
     while (1) {
         recv(sock_client, buffer, BUFFER_SIZE, 0);
-        
-        //calculer le bit de parité
-        int parity = calculate_parity(buffer[0]);
-        printf("Received: %s\n", buffer);
-        printf("Parity: %d\n", parity);
+
+        uint8_t crc =  crc8(buffer[0]);
 
         // je veux avec une chance sur 2 brouiller un bit dans l'octet reçu
         if (rand() % 2 == 0) {
             // brouiller un bit dans l'octet reçu par son opposé
             buffer[0] ^= 1 << (rand() % 8);
         }
-        // envoyer l'octet brouillé au serveur
-        send(sock_serveur, buffer, BUFFER_SIZE, 0);
-        // envoyer le bit de parité au serveur
-        send(sock_serveur, &parity, 1, 0);
+
+        envoyer[0] = buffer[0];
+        envoyer[1] = crc;
+
+        print_bits16(*(uint16_t *)envoyer);
+
+        // envoyer les 2 octets brouillé au serveur
+        send(sock_serveur, envoyer, 2*BUFFER_SIZE, 0);
         
-        
+
+
+
         // recevoir la réponse du serveur
         recv(sock_serveur, buffer, BUFFER_SIZE, 0);
 
+        // envoyer la réponse au client
         send(sock_client, buffer, BUFFER_SIZE, 0);
     }
     
