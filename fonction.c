@@ -39,14 +39,14 @@ uint8_t crc8(uint16_t message)
 
 void print_bits8(uint8_t byte) {
     for (int i = 7; i >= 0; i--) {
-        printf("%d", (byte >> i) & 0x01);
+        printf("%d", (byte >> i) & 0b1);
     }
     printf("\n");
 }
 
 void print_bits16(uint16_t word) {
     for (int i = 15; i >= 0; i--) {
-        printf("%d", (word >> i) & 0x01);
+        printf("%d", (word >> i) & 0b1);
     }
     printf("\n");
 }
