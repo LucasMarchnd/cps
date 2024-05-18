@@ -71,18 +71,20 @@ int main()
     while (1) {
         recv(sock_client, buffer, BUFFER_SIZE, 0);
 
-        uint8_t crc =  crc8(buffer[0]);
+        uint8_t fcs =  frame_check_sequence(buffer[0]);
 
         // je veux avec une chance sur 2 brouiller un bit dans l'octet reçu
         if (rand() % 2 == 0) {
             // brouiller un bit dans l'octet reçu par son opposé
             buffer[0] ^= 1 << (rand() % 8);
         }
+        printf("frame check sequence:");
+        print_bits8(fcs);
 
-        envoyer[0] = buffer[0];
-        envoyer[1] = crc;
+        envoyer[0] = fcs;
+        envoyer[1] = buffer[0];
 
-        print_bits16(*(uint16_t *)envoyer);
+        print_bits16(*(uint16_t*)envoyer);
 
         // envoyer les 2 octets brouillé au serveur
         send(sock_serveur, envoyer, 2*BUFFER_SIZE, 0);
