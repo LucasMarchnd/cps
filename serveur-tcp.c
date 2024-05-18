@@ -42,23 +42,17 @@ int main() {
     while (1) {
         recv(sock_proxy, buffer, 2*BUFFER_SIZE, 0);
 
-        uint8_t calculated_crc = crc8(buffer[0]);
-        
-        print_bits8(buffer[0]);
-        printf("Received CRC: ");
-        print_bits8(buffer[1]);
-        printf("CRC: ");
-        print_bits8(calculated_crc);
-
-        if (calculated_crc == buffer[1]) {
-            printf("Parity is correct\n");
+        // si le reste de la division par 8 est 0, alors le crc est correct
+        if (crc8(*(uint16_t*)buffer) == 0) {
+            printf("%c", buffer[1]);
+            send(sock_proxy, "A", 1, 0);
         } else {
-            printf("Parity is incorrect\n");
+            send(sock_proxy, "N", 1, 0);
         }
-        printf("--------------------\n");
-        send(sock_proxy, "A", 1, 0);
-        
     }
+
+    close(sock_proxy);
+    close(sock_serveur);
 
     return 0;
 }
