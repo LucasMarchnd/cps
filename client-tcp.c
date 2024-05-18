@@ -56,11 +56,11 @@ int main(int argc, char const *argv[])
             recv(sock_proxy, &response, 1, 0);
             if (response == 'A')
             {
-                printf("Parity is correct\n");
+                printf("ACK\n");
             }
             else
             {
-                printf("Parity is incorrect\n");
+                printf("NACK\n");
                 i = i - 1;
                 continue;
             }

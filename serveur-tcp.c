@@ -33,10 +33,10 @@ int main() {
         close(sock_serveur);
         exit(EXIT_FAILURE);
     }
-    printf("Server is listening on port %d\n", PORT);
+    printf("Serveur écoute le port %d\n", PORT);
     proxy_len = sizeof(proxy_addr);
     sock_proxy = accept(sock_serveur, (struct sockaddr *)&proxy_addr, &proxy_len);
-    printf("Proxy connected\n");
+    printf("Proxy connecté\n");
 
     char buffer[2*BUFFER_SIZE];
     while (1) {

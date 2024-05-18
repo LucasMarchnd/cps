@@ -39,7 +39,7 @@ int main()
         exit(EXIT_FAILURE);
     }
     
-    printf("Proxy is listening on port %d\n", PROXY_PORT);
+    printf("Proxy ecoute le port : %d\n", PROXY_PORT);
     
     client_len = sizeof(client_addr);
     if ((sock_client = accept(sock_proxy, (struct sockaddr *)&client_addr, &client_len)) < 0) {
@@ -47,7 +47,7 @@ int main()
         close(sock_proxy);
         exit(EXIT_FAILURE);
     }
-    printf("Client connected\n");
+    printf("Client connecté\n");
 
     // Mise en place de la connexion avec le serveur
     if ((sock_serveur = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
@@ -62,7 +62,7 @@ int main()
         close(sock_serveur);
         exit(EXIT_FAILURE);
     }
-    printf("Connected to server\n");
+    printf("Serveur connecté\n");
 
     //srand(time(NULL));
 
