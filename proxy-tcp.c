@@ -76,8 +76,11 @@ int main()
         // je veux avec une chance sur 2 brouiller un bit dans l'octet reçu
         if (rand() % 2 == 0) {
             // brouiller un bit dans l'octet reçu par son opposé
+            // on fait un XOR
+            buffer[0] ^= 1 << (rand() % 8);
             buffer[0] ^= 1 << (rand() % 8);
         }
+
         printf("frame check sequence:");
         print_bits8(fcs);
 
@@ -89,8 +92,6 @@ int main()
         // envoyer les 2 octets brouillé au serveur
         send(sock_serveur, envoyer, 2*BUFFER_SIZE, 0);
         
-
-
 
         // recevoir la réponse du serveur
         recv(sock_serveur, buffer, BUFFER_SIZE, 0);
