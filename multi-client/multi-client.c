@@ -41,19 +41,33 @@ int main() {
     while (1) {
         // Lire le message de l'utilisateur
         fgets(buffer, BUFFER_SIZE, stdin);
-        buffer[strcspn(buffer, "\n")] = '\0';  // Supprimer le '\n' de fgets
+        buffer[strcspn(buffer, "\n")] = '\0';
 
-        // Envoyer le message au serveur
-        write(client_socket, buffer, strlen(buffer));
-
-        // Lire la réponse du serveur
-        bytes_read = read(client_socket, buffer, BUFFER_SIZE);
-        if (bytes_read <= 0) {
-            perror("Erreur de lecture du serveur");
-            break;
+        for (int i = 0; i < strlen(buffer); i++)
+        {
+            write(client_socket, &buffer[i], 1);
+            // Lire la réponse du serveur
+            
+            // reponse 
+            char reponse;
+            
+            bytes_read = read(client_socket, &reponse, 1);
+            if (bytes_read <= 0) {
+                perror("Erreur de lecture du serveur");
+                break;
+            }
+            if (reponse == 'A')
+            {
+                printf("Reçu du serveur: %c\n", reponse);
+            
+            }
+            else
+            {
+                printf("Reçu du serveur: %c\n", reponse);
+                i--;
+                continue;
+            }
         }
-        buffer[bytes_read] = '\0';
-        printf("Reçu du serveur: %s\n", buffer);
     }
 
     close(client_socket);

@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+#include "fonction.h"
 
 #define PORT 8080
 #define BUFFER_SIZE 1
@@ -37,12 +38,24 @@ int main() {
     sock_proxy = accept(sock_serveur, (struct sockaddr *)&proxy_addr, &proxy_len);
     printf("Proxy connecté\n");
 
-    char buffer[2*BUFFER_SIZE];
+    char buffer[2];
     while (1) {
-        recv(sock_proxy, buffer, 2*BUFFER_SIZE, 0);
+        recv(sock_proxy, buffer, 2, 0);
 
-        printf("buffer : %s\n", buffer);
+        // printf("Reçu du proxy: %c\n", buffer[1]);
+        fflush(stdout);
+        if (crc8(*(uint16_t*)buffer) == 0) {
+            fprintf(stdout,"%c\n", buffer[1]);
+            send(sock_proxy, "A", 1, 0);
+        } 
+        else 
+        {
+            send(sock_proxy, "N", 1, 0);
+        }
+        
+        fflush(stdout);
     }
+
 
     close(sock_proxy);
     close(sock_serveur);
