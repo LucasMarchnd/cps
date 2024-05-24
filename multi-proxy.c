@@ -18,6 +18,8 @@ typedef struct {
 	int client_id;
 } argument_t;
 
+int nb_erreur;
+
 void *handle_client(void *arg) {
 	argument_t *args = (argument_t *)arg;
 	char buffer[BUFFER_SIZE];
@@ -39,7 +41,7 @@ void *handle_client(void *arg) {
 		buff[2] = args->client_id;
 
 
-		int nberreur = rand_r(&seed) % 9;
+		int nberreur = rand_r(&seed) % (nb_erreur + 1);
 
 		for (int i = 0; i < nberreur; i++)
 		{
@@ -91,12 +93,13 @@ int main(int argc, char *argv[]) {
 	socklen_t client_addr_len = sizeof(client_addr);
 	pthread_t thread_id;
 
-	if (argc != 3) {
-		fprintf(stderr, "Usage: %s <port_proxy> <port_serveur>\n", argv[0]);
+	if (argc != 4) {
+		fprintf(stderr, "Usage: %s <port_proxy> <port_serveur> <nb_erreur>\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 	port_proxy = atoi(argv[1]);
 	port_serveur = atoi(argv[2]);
+	nb_erreur = atoi(argv[3]);
 	
 
 	// Créer le socket du proxy

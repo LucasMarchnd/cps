@@ -7,7 +7,6 @@
 
 #include "fonction.h"
 
-#define PORT 8080
 #define BUFFER_SIZE 1
 
 int main(int argc, char const *argv[]) {
