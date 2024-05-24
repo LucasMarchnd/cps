@@ -7,8 +7,6 @@
 
 #include "fonction.h"
 
-#define PORT 9090
-#define SERVER_PORT 8080
 
 #define BUFFER_SIZE 1024
 #define MAX_CLIENTS 10
@@ -81,11 +79,19 @@ void *handle_client(void *arg) {
 	return NULL;
 }
 
-int main() {
-	int proxy_socket, sock_serveur, *new_client_socket, nb_clients = 0;
+int main(int argc, char *argv[]) {
+	int proxy_socket, sock_serveur, *new_client_socket, nb_clients = 0,port_proxy, port_serveur;
 	struct sockaddr_in proxy_addr, client_addr, serveur_addr;
 	socklen_t client_addr_len = sizeof(client_addr);
 	pthread_t thread_id;
+
+	if (argc != 3) {
+		fprintf(stderr, "Usage: %s <port_proxy> <port_serveur>\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+	port_proxy = atoi(argv[1]);
+	port_serveur = atoi(argv[2]);
+	
 
 	// Créer le socket du proxy
 	proxy_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -97,7 +103,7 @@ int main() {
 	// Configurer l'adresse du proxy
 	proxy_addr.sin_family = AF_INET;
 	proxy_addr.sin_addr.s_addr = INADDR_ANY;
-	proxy_addr.sin_port = htons(PORT);
+	proxy_addr.sin_port = htons(port_proxy);
 
 	// Attacher le socket à l'adresse
 	if (bind(proxy_socket, (struct sockaddr *)&proxy_addr, sizeof(proxy_addr)) == -1) {
@@ -120,7 +126,7 @@ int main() {
 	}
 	serveur_addr.sin_family = AF_INET;
 	serveur_addr.sin_addr.s_addr = INADDR_ANY;
-	serveur_addr.sin_port = htons(SERVER_PORT);
+	serveur_addr.sin_port = htons(port_serveur);
 	if (connect(sock_serveur, (struct sockaddr *)&serveur_addr, sizeof(serveur_addr)) < 0) {
 		perror("connect");
 		close(sock_serveur);

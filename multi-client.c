@@ -7,11 +7,19 @@
 #define PORT 9090
 #define BUFFER_SIZE 1024
 
-int main() {
-    int client_socket;
+int main(int argc, char *argv[]) {
+    int client_socket,port_proxy;
     struct sockaddr_in server_addr;
     char buffer[BUFFER_SIZE];
     int bytes_read;
+
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <port_proxy>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    
+    port_proxy = atoi(argv[1]);
+
 
     // Créer le socket
     client_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -22,7 +30,7 @@ int main() {
 
     // Configurer l'adresse du serveur
     server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(PORT);
+    server_addr.sin_port = htons(port_proxy);
     if (inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr) <= 0) {
         perror("Adresse invalide ou non supportée");
         close(client_socket);

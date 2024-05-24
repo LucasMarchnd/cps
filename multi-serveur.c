@@ -10,11 +10,17 @@
 #define PORT 8080
 #define BUFFER_SIZE 1
 
-int main() {
+int main(int argc, char const *argv[]) {
     // connexion au proxy
-    int sock_proxy,sock_serveur;
+    int sock_proxy,sock_serveur, port_proxy;
     struct sockaddr_in address, proxy_addr;
     socklen_t proxy_len;
+
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <port_proxy>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+    port_proxy = atoi(argv[1]);
 
     // Mise en place de la connexion avec le proxy (bind)
     if ((sock_serveur = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
@@ -22,7 +28,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
     address.sin_family = AF_INET;
-    address.sin_port = htons(PORT);
+    address.sin_port = htons(port_proxy);
     if (bind(sock_serveur, (struct sockaddr *)&address, sizeof(address)) < 0) {
         perror("bind failed");
         close(sock_serveur);
@@ -33,7 +39,7 @@ int main() {
         close(sock_serveur);
         exit(EXIT_FAILURE);
     }
-    printf("Serveur écoute le port %d\n", PORT);
+    printf("Serveur écoute le port %d\n", port_proxy);
     proxy_len = sizeof(proxy_addr);
     sock_proxy = accept(sock_serveur, (struct sockaddr *)&proxy_addr, &proxy_len);
     printf("Proxy connecté\n");
