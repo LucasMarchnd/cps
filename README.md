@@ -1,6 +1,6 @@
 # cps
 
-### Utilisation
+## Utilisation
 
 - make
 - ./serveur <port_proxy>
@@ -8,7 +8,7 @@
 - ./client <port_serveur>
 - Mettre les messages dans le client
 
-### Exemple d'utilisation
+## Exemple d'utilisation
 
 - ./serveur 9090
 - ./proxy 8080 9090
