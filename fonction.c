@@ -14,7 +14,7 @@ uint8_t frame_check_sequence(uint8_t message) {
         }
         m <<= 1;
     }
-    return (uint8_t)(m >> 8); // Retourner le CRC (les 8 bits de gauche)
+    return (uint8_t)(m >> 8); // Retourner le  frame_check_sequence (les 8 bits de gauche)
 }
 
 uint8_t crc8(uint16_t message)

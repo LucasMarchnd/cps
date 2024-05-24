@@ -11,7 +11,7 @@
 #define BUFFER_SIZE 1
 
 int main(int argc, char const *argv[]) {
-    // connexion au proxy
+    // connection au proxy
     int sock_proxy,sock_serveur, port_serveur;
     struct sockaddr_in address, proxy_addr;
     socklen_t proxy_len;
@@ -22,7 +22,7 @@ int main(int argc, char const *argv[]) {
     }
     port_serveur = atoi(argv[1]);
 
-    // Mise en place de la connexion avec le proxy (bind)
+    // Mise en place de la connection avec le proxy
     if ((sock_serveur = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
         perror("socket failed");
         exit(EXIT_FAILURE);

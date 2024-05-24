@@ -33,7 +33,7 @@ void *handle_client(void *arg) {
 		// je veux avec une chance sur 2 brouiller un bit dans l'octet reçu
         if (rand_r(&seed) % 2 == 0) {
             // brouiller un bit dans l'octet reçu par son opposé
-            buffer[0] ^= 1 << (rand() % 8);
+            buffer[0] ^= 1 << (rand_r(&seed) % 8);
         }
         printf("frame check sequence:");
         print_bits8(fcs);
