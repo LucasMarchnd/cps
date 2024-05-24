@@ -31,16 +31,22 @@ void *handle_client(void *arg) {
 
 		uint8_t fcs =  frame_check_sequence(buffer[0]);
 		// je veux avec une chance sur 2 brouiller un bit dans l'octet reçu
-        if (rand_r(&seed) % 2 == 0) {
-            // brouiller un bit dans l'octet reçu par son opposé
-            buffer[0] ^= 1 << (rand_r(&seed) % 8);
-        }
         printf("frame check sequence:");
         print_bits8(fcs);
         
 		buff[0] = fcs;
 		buff[1] = buffer[0];
 		buff[2] = args->client_id;
+
+
+		int nberreur = rand_r(&seed) % 9;
+
+		for (int i = 0; i < nberreur; i++)
+		{
+			int j = rand_r(&seed)% 2;
+			buff[j] ^= 1 << (rand_r(&seed) % 8);
+		}
+		
 
 		print_bits16(*(uint16_t*)buff);
 
