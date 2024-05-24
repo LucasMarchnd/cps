@@ -5,35 +5,28 @@
 
 uint8_t frame_check_sequence(uint8_t message) {
     uint16_t m = (uint16_t) message << 8; // on ajoute 9-1 zéros à la fin du message
-    // printf("crc 8 m: ");
-    // print_bits16(m);
-    uint16_t polynome = POLYNOME << 7; // Align the polynomial to the left
+    
+    uint16_t polynome = POLYNOME << 7;
 
     for (int i = 0; i < 8; i++) {
-        if (m & 0b1000000000000000) { // Si le bit le plus à gauche est 1
+        if (m & 0b1000000000000000) {
             m ^= polynome; // XOR avec le polynôme
         }
-        m <<= 1; // Décaler le message à gauche
-        // print_bits16(m);
+        m <<= 1;
     }
-    // printf("fin crc 8\n");
     return (uint8_t)(m >> 8); // Retourner le CRC (les 8 bits de gauche)
 }
 
 uint8_t crc8(uint16_t message)
 {
-    // printf("crc 8 m: ");
-    // print_bits16(message);
-    uint16_t polynome = POLYNOME << 7; // Align the polynomial to the left
+    uint16_t polynome = POLYNOME << 7;
 
     for (int i = 0; i < 8; i++) {
-        if (message & 0x8000) { // Si le bit le plus à gauche est 1
-            message ^= polynome; // XOR avec le polynôme
+        if (message & 0x8000) { 
+            message ^= polynome;
         }
-        message <<= 1; // Décaler le message à gauche
-        // print_bits16(message);
+        message <<= 1;
     }
-    // printf("fin crc 8\n");
     return (uint8_t)(message >> 8); // Retourner le CRC (les 8 bits de gauche)
 }
 
