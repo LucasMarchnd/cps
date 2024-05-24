@@ -9,10 +9,10 @@
 
 #define PORT 9090
 #define SERVER_PORT 8080
+
 #define BUFFER_SIZE 1024
 #define MAX_CLIENTS 10
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 typedef struct {
 	int client_socket;
@@ -47,8 +47,6 @@ void *handle_client(void *arg) {
 
         printf("Reçu du client %d: %c\n", args->client_id, buff[1]);
 
-        // Verrouiller le mutex pour éviter les conflits d'écriture simultanée au serveur
-        pthread_mutex_lock(&mutex);
 
         // Envoyer l'information au serveur
         if (send(args->sock_serveur, buff, 2, 0) < 0) {
@@ -73,7 +71,6 @@ void *handle_client(void *arg) {
             break;
         }
 
-        pthread_mutex_unlock(&mutex);
     }
 
 	printf("Client %d déconnecté.\n", args->client_id);
