@@ -38,14 +38,12 @@ int main() {
     sock_proxy = accept(sock_serveur, (struct sockaddr *)&proxy_addr, &proxy_len);
     printf("Proxy connecté\n");
 
-    char buffer[2];
+    char buffer[3];
     while (1) {
-        recv(sock_proxy, buffer, 2, 0);
+        recv(sock_proxy, buffer, 3, 0);
 
-        // printf("Reçu du proxy: %c\n", buffer[1]);
-        fflush(stdout);
         if (crc8(*(uint16_t*)buffer) == 0) {
-            fprintf(stdout,"%c\n", buffer[1]);
+            fprintf(stdout,"Client id : %d :  %c\n", buffer[2] ,buffer[1]);
             send(sock_proxy, "A", 1, 0);
         } 
         else 
@@ -53,7 +51,6 @@ int main() {
             send(sock_proxy, "N", 1, 0);
         }
         
-        fflush(stdout);
     }
 
 

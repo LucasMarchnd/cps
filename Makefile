@@ -1,7 +1,7 @@
 all:
-	gcc -o serveur serveur-tcp.c fonction.c
-	gcc -o client client-tcp.c fonction.c
-	gcc -o proxy proxy-tcp.c fonction.c
+	gcc -o proxy multi-proxy.c fonction.c
+	gcc -o client multi-client.c fonction.c
+	gcc -o serveur multi-serveur.c fonction.c
 clean:
-	rm -f serveur client proxy
+	rm -f proxy client serveur
 	rm -f *.o

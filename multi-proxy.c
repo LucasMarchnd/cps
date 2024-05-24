@@ -29,7 +29,7 @@ void *handle_client(void *arg) {
 	printf("Client %d connecté.\n", args->client_id);
 
     while ((bytes_read = read(args->client_socket, buffer, 1)) > 0) {
-        char buff[2];
+        char buff[3];
 
 		uint8_t fcs =  frame_check_sequence(buffer[0]);
 		// je veux avec une chance sur 2 brouiller un bit dans l'octet reçu
@@ -42,6 +42,7 @@ void *handle_client(void *arg) {
         
 		buff[0] = fcs;
 		buff[1] = buffer[0];
+		buff[2] = args->client_id;
 
 		print_bits16(*(uint16_t*)buff);
 
@@ -49,7 +50,7 @@ void *handle_client(void *arg) {
 
 
         // Envoyer l'information au serveur
-        if (send(args->sock_serveur, buff, 2, 0) < 0) {
+        if (send(args->sock_serveur, buff, 3, 0) < 0) {
             perror("Erreur d'écriture au serveur");
             break;
         }
